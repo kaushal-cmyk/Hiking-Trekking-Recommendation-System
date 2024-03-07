@@ -1,0 +1,13 @@
+References
+
+    # haversine formula to calculate the distance between two (latitude, longitude) points.
+        -> https://www.igismap.com/haversine-formula-calculate-geographic-distance-earth/
+        -> https://www.movable-type.co.uk/scripts/latlong.html
+        -> https://www.sisense.com/blog/latitude-longitude-distance-calculation-explained/
+        -> https://www.baeldung.com/cs/haversine-formula
+        -> https://www.themathdoctors.org/distances-on-earth-2-the-haversine-formula/
+
+    # GeoLocation API
+        -> https://w3c.github.io/geolocation-api/#getcurrentposition-method
+        -> https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/watchPosition
+

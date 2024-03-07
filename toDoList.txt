@@ -1,0 +1,260 @@
+Backend
+    -> Routes
+        -> Controller
+        -> Method
+            -> What the controller should do
+    //sign in with google
+    -> /users
+
+        -> /
+            -> method: get  
+            -> controller: getAllUser
+                -> send a response object with all the users data
+            
+            -> method: post (done)
+            -> controller: createUser
+                -> store the users data in the db
+        
+        -> /:userId
+            -> method: get
+            -> controller: readSpecificUser
+                -> send a response object with the data of userId user
+        
+        -> /verify-email (done)
+            -> method: post
+            -> controller: verifyEmailUser
+                -> set isVerifyEmail to true
+        
+        -> /login (done)
+            -> method: post
+            -> controller: loginUser
+                -> create a token and send a response object with it to the frontend
+        
+        
+        -> /update-password (done)
+            -> method: post
+            -> controller: updatePasswordUser
+                -> req.body is an object with the oldPassword and the newPassword which is used to update the users password and a success: true response is sent to the frontend
+        
+        -> /forgot-password (done)
+            -> method: post
+            -> controller: forgotPasswordUser
+                -> req.body is an object with email which is used to generate the token for its corresponding id which is attached to an email to update the password
+        
+        -> /reset-password (done)
+            -> method: post
+            -> controller resetPasswordUser
+                -> req.body is an object with password that is used as the new password to the user with id obtained from the token
+        
+        -> /my-profile (done)
+            -> method: get
+            -> controller: getMyProfileUser
+                -> send the response object with the profile of the user whose id matches the corresponding token
+            
+            -> method: patch (done)
+            -> controller: updateMyProfileUser
+                -> req.body is an object with data that needs to updated and send success: true response
+                -> email, password and role cannot be updated
+    
+    -> /hTLocations
+
+        -> /
+            -> method: post
+            -> controller: createHTLocation
+                -> create an hTLocation
+                -> must be associated to a user
+
+            -> method: get
+            -> controller: getAllHTLocation
+                -> send all the hTLocations to the frontend
+            
+        -> /recommendation
+            -> method: get
+            -> controller: getRecommendation
+                -> send all the recommended locations to the frontend
+
+        -> /user
+            -> method: get
+            -> controller: getHTLocationOfUser
+                -> sends all the locations created by user to the frontend
+
+        -> /:id
+            -> method: get
+            -> controller: getHTLocation
+                -> send the particular hTLocation to the frontend
+            
+            -> method: patch
+            -> controller: updateHTLocation
+                -> update the particular hTLocation and send success: true to the frontend
+            
+            -> method: delete
+            -> controller: deleteHTLocation
+                -> delete the particular hTLocation
+        
+    -> /ratings
+        
+        -> /
+            -> method: post
+            -> controller: createRating
+                -> store the rating in the db associated to the corresponding user and hTLocation
+            
+            -> method: get
+            -> controller: getAllRating
+                -> return all rating
+
+        -> /:ratingId 
+            -> method: patch
+            -> controller: updateRating
+                -> update the rating in the db associated to the corresponding user and hTLocation
+
+        
+        -> /hTLocations/:hTLocId (done)
+            -> method: get
+            -> controller: getHTLocationAllRating
+                -> return all the ratings of a particular hTLocId to the frontend
+            
+            -> method: post (done)
+            -> controller: createHTLocationRating
+                -> store the rating of a particular user obtained from the token for hTLocation with id hTLocId.
+            
+        
+        -> /users
+            -> method: get
+            -> controller: getUserAllRating
+                -> return all the ratings written by userId to the frontend
+
+    -> /wishLists
+        -> /
+            -> method: get
+            -> controller: getWishList
+                -> return the wishList of a particular user to the frontend
+        
+            -> method: post
+            -> controller: addToWishList
+                -> add item to the wishList of a particular user
+            
+            -> method: patch
+            -> controller: updateWishList
+                -> update item in the wishListt of a particular user
+        
+token
+purpose = ["verify-email", "reset-password", "login"]
+
+isAuthenticated attaches the id as req._id
+
+
+
+dfd
+er diagram
+use case diagram
+activity diagram
+recommendation
+sign in with google
+leaflet
+authorization
+
+
+type => ["sort", "filter"]
+sort => ["closest", "rating", "wishList","recently-added"]
+filter => ["attributes", "difficulty", "duration"]
+sorting
+    -> by distance from the user's location i.e. closest
+    -> highest rated
+    -> highest wishList
+    -> recently added
+
+filtering
+    -> based on attributes
+    -> based on difficulty
+    -> 
+
+frontend
+    -> Route
+        -> Component
+        -> What the component should do
+    
+    -> '/'
+        -> index
+            -> <div>Home Page</p>
+            -> Display the top hTLocations
+            -> Includes a search bar
+    
+        -> register
+            -> <Register></Register> (done)
+            -> a Register form that sends registration data obj to the backend 
+            ->  {
+                url: `http://localhost:8000/users`,
+                method: `post`,
+                data: {  
+                    firstName: "Hitesh",
+                    lastName: "Ji",
+                    gender: "male",
+                    dob: "2000-09-11",
+                    address: "Lalitpur, Nepal",
+                    password: "12345",
+                    email: "hiteshmaharjan010@gmail.com"
+                }
+            }
+
+        -> verify-email (done)
+            ->send the token to the backend and if the token is successfuly verified redirect the page to login
+        
+        -> login (done)
+            -> index
+            -> <Login></Login>
+            -> a login form that sends login info to the backend and saves the token in local storage
+
+            -> forgot-password (Kaushal)
+                -> <ForgotPassword></ForgotPassword>
+                -> a form with email as input. If the reset-password email is sent successfully so a toast message
+
+            -> reset-password (Kaushal)
+                -> <ResetPassword></ResetPassword>
+                -> a form that takes password as input. If reset is successful redirect the page to the login page
+        
+        
+        -> users
+            -> my-profile
+                -> index
+                    -> <MyProfile></MyProfile>
+                    -> view the user's profile
+                    -> and the user's location in the map
+                    -> the user's wishList
+                    -> the user's ratings
+                
+                -> update
+                    -> <UpdateMyProfile></UpdateMyProfile>
+                    -> update the user's profile (excluding the user's email & password)
+                
+            -> update-password (Kaushal)
+                -> <UpdatePassword></UpdatePassword>
+                -> create a form containing the user's old and new password that the user can update and send it to the backend
+                    
+        -> hTLocation
+            -> index
+                -> <ShowAllHTLocation> (half)
+                -> shows all the HTLocations with 3 buttons => details, edit(if the user is the one who has created it), rating
+                -> rating button for each HTLocation, Add to wishlist button in each location
+            
+            -> :hTLocId
+                -> <ShowSpecificHTLocation> (half)
+                -> shows the full detail of the specific HTLocation with 3 buttons => edit & delete(if the user is the one who has created it) and a ratings option
+                -> the map showing the location and the current users location
+            
+            -> update
+                -> :hTLocId
+                    -> <UpdateSpecificHTLocation> (half)
+                    -> update the specific hTLocation
+            
+            -> create
+                -> <CreateHTLocation> (half)
+                -> Create HTLocation. After successful creation of hTLocation, navigate to its full detail page
+
+        -> rating
+        
+        -> wishlist
+
+        -> clicking on one attribute shows all the locations with that attribute
+
+
+    
